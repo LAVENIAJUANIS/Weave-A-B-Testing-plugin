@@ -1,6 +1,5 @@
 <?php
-// Add Test page
-// Add Test page
+
 add_action('admin_menu', 'ab_testify_add_test_page');
 
 function ab_testify_add_test_page() {
@@ -11,49 +10,55 @@ function ab_testify_add_test_page() {
 function ab_testify_test_page() {
     ?>
     <div class="wrap">
-        <h1>Add Test</h1>
+         <h1>Add Test</h1>
+        <div class="card">
+       
         <form method="post" action="">
             <h2>Test information</h2>
             <label for="test_name">Test Name:</label><br>
             <input type="text" id="test_name" name="test_name" required placeholder="Add your test name here..."><br>
-
+        </div>
             <h2>Conversion Goals</h2>
-            <input type="checkbox" id="goal-cta" name="conversion_goals[]" value="cta" onchange="toggleCTADropdown()">
-            <label for="goal-cta">Clicking CTA</label><br>
+            <div class="card">
+            <div id="action-section">
+                <h3>Action</h3>
+                    <input type="checkbox" id="goal-cta" name="conversion_goals[]" value="cta" onchange="toggleCTADropdown()">
+                    <label for="goal-cta">Clicking CTA</label><br>
 
-            <div id="cta-dropdown" style="display: none;">
-                <label for="cta-select">Select CTA Button:</label>
-                <select id="cta-select" name="cta_select">
-                    <option value="button1">Button 1</option>
-                    <option value="button2">Button 2</option>
-                </select>
-            </div>
+                    <div id="cta-dropdown" style="display: none;">
+                        <label for="cta-select">Select CTA Button:</label>
+                        <select id="cta-select" name="cta_select">
+                          <!-- Options will be dynamically generated here -->
+                        </select>
+                    </div>
 
-            <input type="checkbox" id="goal-inquiry" name="conversion_goals[]" value="inquiry" onchange="toggleInquiryDropdown()">
-            <label for="goal-inquiry">Contact Form Inquiries</label><br>
+                    <input type="checkbox" id="goal-inquiry" name="conversion_goals[]" value="inquiry" onchange="toggleInquiryDropdown()">
+                    <label for="goal-inquiry">Contact Form Inquiries</label><br>
 
-            <div id="inquiry-dropdown" style="display: none;">
-                <label for="inquiry-select">Select Contact Form:</label>
-                <select id="inquiry-select" name="inquiry_select">
-                   <?php
-                   // Retrieve contact forms dynamically
-                   $contact_forms = get_posts(array(
-                    'post_type' => 'wpcf7_contact_form', // Assuming using contact Form 7 plugin
-                    'posts_per_page' => -1,
-                    'fields' => 'ids' // Retrieve only post IDs
-                   ));
-                   if ($contact_forms) {
-                        foreach ($contact_forms as $form_id) {
-                            $form_name = get_the_title($form_id);
-                            echo '<option value="' . esc_attr($form_id) . '">' . esc_html($form_name) . '</option>';
+                    <div id="inquiry-dropdown" style="display: none;">
+                        <label for="inquiry-select">Select Contact Form:</label>
+                        <select id="inquiry-select" name="inquiry_select">
+                        <?php
+                        // Retrieve contact forms dynamically
+                        $contact_forms = get_posts(array(
+                            'post_type' => 'wpcf7_contact_form', // Assuming using contact Form 7 plugin
+                            'posts_per_page' => -1,
+                            'fields' => 'ids' // Retrieve only post IDs
+                        ));
+                        if ($contact_forms) {
+                                foreach ($contact_forms as $form_id) {
+                                    $form_name = get_the_title($form_id);
+                                    echo '<option value="' . esc_attr($form_id) . '">' . esc_html($form_name) . '</option>';
+                                }
+                        } else {
+                                echo '<option value="">No contact forms found</option>';
                         }
-                   } else {
-                        echo '<option value="">No contact forms found</option>';
-                   }
-                   ?>
-                </select>
-            </div>
-
+                        ?>
+                        </select>
+                    </div>
+                    </div>
+                    </div>
+            <div class="card">
             <h2> Choose Content</h2>
             <label for="content-select">Select Content:</label>
             <select id="content-select" name="content">
@@ -92,23 +97,50 @@ function ab_testify_test_page() {
                 ?>
             </select>
 
-            <h2>4. Target Elements<h2>
-            <input type="checkbox" id="element-title" name="target_elements[]" value="title">
-            <label for="element-title">Title</label><br>
+            <h2>Target Elements<h2>
+            <div>
+                <input type="checkbox" id="element-title" name="target_elements[]" value="title" onchange="toggleTargetElements()">
+                <label for="element-title">Title</label><br>
+                <div id="title-variation-input" style="display: none;">
+                    <input type="text" id="title-variation" placeholder="Enter title variation">
+                </div>
+                
+                <div id="title-buttons" style="display: none;">
+                    <button class="action-button link-button" data-action="editElement" data-element-id="title">Edit</button>
+                    <button id="preview-button">Preview</button>
+                </div>
+                <div id="preview-section">
+                    
+                </div>
 
-            <input type="checkbox" id="element-description" name="target_elements[]" value="description">
-            <label for="element-description">Description</label><br>
+                <div id="title-variations" style="display: none;">
+                    <button class="action-button link-button" data-action="addVariation" data-element-id="title">Add Variation</button>
+                </div>
 
-            <input type="checkbox" id="element-image" name="target_elements[]" value="image">
-            <label for="element-image">Image</label><br>
+                
+            </div>
 
-            <input type="checkbox" id="element-layout" name="target_elements[]" value="layout">
-            <label for="element-layout">Layout</label><br>
 
-            <h2> Create Variations</h2>
 
-            <input type="submit" name="ab_testify_submit" class="button-primary" value="Start Test">
+
+
+                <input type="checkbox" id="element-description" name="target_elements[]" value="description">
+                <label for="element-description">Description</label><br>
+
+                <input type="checkbox" id="element-image" name="target_elements[]" value="image">
+                <label for="element-image">Image</label><br>
+
+                <input type="checkbox" id="element-layout" name="target_elements[]" value="layout">
+                <label for="element-layout">Layout</label><br>
+
+                
+
+                <h2> Create Variations</h2>
+
+                <input type="submit" name="ab_testify_submit" class="button-primary" value="Start Test">
+
         </form>
+    </div>
     </div>
     <?php
 }
@@ -125,6 +157,7 @@ function ab_testify_process_test_submission() {
         exit();
     }
 }
+
 
 
 

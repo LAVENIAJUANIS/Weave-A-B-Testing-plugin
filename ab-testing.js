@@ -4,9 +4,24 @@ function toggleCTADropdown() {
 
     if (ctaCheckbox.checked) {
         ctaDropdown.style.display = 'block';
+        populateCTAOptions();
     } else {
         ctaDropdown.style.display = 'none';
     }
+}
+
+function populateCTAOptions() {
+    var ctaSelect = document.getElementById('cta-select');
+    ctaSelect.innerHTML = ''; 
+
+    var ctaButtons = document.querySelectorAll('.cta-buttonn');
+
+    ctaButtons.forEach(function(button, index) {
+        var option = document.createElement('option');
+        option.value = 'button' + (index + 1); 
+        option.textContent = 'Button'+ (index + 1);
+        ctaSelect.appendChild(option);
+    });
 }
 
 function toggleInquiryDropdown() {
@@ -86,6 +101,69 @@ document.addEventListener('submit', function(event) {
     }
 }, false);
 
+// for title
+function toggleTargetElements() {
+    var titleCheckbox = document.getElementById('element-title');
+    var titleVariationInput = document.getElementById('title-variation-input');
+    var titleButtons = document.getElementById('title-buttons');
+    var titleVariations = document.getElementById('title-variations');
+
+    if (titleCheckbox.checked) {
+        titleVariationInput.style.display = 'block';
+        titleButtons.style.display = 'block';
+        titleVariations.style.display = 'block';
+    } else {
+        titleVariationInput.style.display = 'none';
+        titleButtons.style.display = 'none';
+        titleVariations.style.display = 'none';
+    }
+}
+
+function editElement(elementId) {
+    console.log('Edit action for element', elementId);
+}
+
+function previewElement(elementId) {
+    console.log('Preview action for element:', elementId);
+}
+
+function addVariation(elementId) {
+    console.log('Add variation action for element:', elementId);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.action-button').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var action = this.getAttribute('data-action');
+            var elementId = this.getAttribute('data-element-id');
+            if (action && elementId) {
+                window[action](elementId);
+            }
+        });
+    });
+});
+
+// Preview
+
+function previewElement(elementId) {
+    var selectedContentId = document.getElementById('content-select').value;
+    var titleVariation = document.getElementById('title-variation').value;
+    var previewSection = document.getElementById('preview-section');
+
+    if (previewSection) {
+        previewSection.innerHTML = '<h3>Preview:<h3><p>Title:' + titleVariation + '</p>';
+    }
+
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var previewButton = document.getElementById('preview-button');
+    if(previewButton) {
+        previewButton.addEventListener('click', function() {
+            previewElement('title');
+        });
+    }
+});
 
 
 
