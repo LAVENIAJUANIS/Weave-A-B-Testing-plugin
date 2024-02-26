@@ -27,6 +27,23 @@ function enqueue_my_plugin_styles() {
 
 add_action('wp_enqueue_scripts', 'enqueue_my_plugin_styles');
 
+// AJAX
+function get_page_content_callback() {
+
+    if(isset($_POST['post_id'])) {
+        $post_id = intval($_POST['post_id']);
+
+        $post_content = get_post_field('post_content', $post_id);
+        echo $post_content;
+    } else {
+        echo 'Error: Missing post ID parameter.';
+    }
+    wp_die();
+
+}
+
+add_action('wp_ajax_get_page_content', 'get_page_content_callback');
+
 function ab_testify_activate() {
     // Add activation tasks here
     // For example, create database tables or initialize settings
