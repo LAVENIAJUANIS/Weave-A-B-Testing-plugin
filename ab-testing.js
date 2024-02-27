@@ -1,3 +1,15 @@
+function toggleCTADropdown() {
+    var ctaDropdown = document.getElementById('cta-dropdown');
+    ctaDropdown.style.display = document.getElementById('goal-cta').checked ? 'block' : 'none';
+}
+
+function toggleInquiryDropdown() {
+    var inquiryDropdown = document.getElementById('inquiry-dropdown');
+    inquiryDropdown.style.display = document.getElementById('goal-inquiry').checked ? 'block' : 'none';
+}
+
+
+
 function toggleTargetElements() {
     toggleElementDisplay('element-title', 'title-variation-input', 'title-buttons', 'title-variations');
     toggleElementDisplay('element-description', 'description-variation-input', 'description-buttons', 'description-variations');
@@ -20,38 +32,15 @@ function toggleElementDisplay(checkboxId, variationInputId, buttonsId, variation
         buttons.style.display = 'none';
         variations.style.display = 'none';
     }
+}
 
-    if (checkboxId === 'element-image') {
-        // Call image preview function
-        previewImage();
+function previewTitleElement() {
+    var titleVariation = document.getElementById('title-variation').value;
+    var previewTitleSection = document.getElementById('preview-title-section');
+
+    if (previewTitleSection) {
+        previewTitleSection.innerHTML = '<h3>Preview:</h3><p>Title: ' + titleVariation + '</p>';
     }
-}
-
-function previewImage() {
-    
-    var input = document.getElementById('image-variation');
-    var preview = document.getElementById('preview-image-section');
-
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-            
-            preview.innerHTML = `<h3>Image Preview:</h3><img src="${e.target.result}" alt="Uploaded Image" style="max-width: 100%;">`;
-        }
-        
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
-// Edit element function
-function editElement(elementId) {
-    console.log('Edit action for element', elementId);
-}
-
-// Add variation function
-function addVariation(elementId) {
-    console.log('Add variation action for element:', elementId);
 }
 
 function previewDescriptionElement() {
@@ -63,12 +52,18 @@ function previewDescriptionElement() {
     }
 }
 
-function previewTitleElement() {
-    var titleVariation = document.getElementById('title-variation').value;
-    var previewTitleSection = document.getElementById('preview-title-section');
+function previewImage() {
+    var input = document.getElementById('image-variation');
+    var preview = document.getElementById('preview-image-section');
 
-    if (previewTitleSection) {
-        previewTitleSection.innerHTML = '<h3>Preview:</h3><p>Title: ' + titleVariation + '</p>';
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            preview.innerHTML = `<h3>Image Preview:</h3><img src="${e.target.result}" alt="Uploaded Image" style="max-width: 100%;">`;
+        }
+        
+        reader.readAsDataURL(input.files[0]);
     }
 }
 
@@ -84,13 +79,30 @@ document.addEventListener('DOMContentLoaded', function() {
         checkbox.addEventListener('change', toggleTargetElements);
     });
 
+
+    var contentSelect = document.getElementById('content-select');
+    contentSelect.addEventListener('change', function() {
+        updatePreview();
+    });
+
     var previewButtons = document.querySelectorAll('.preview-button');
     previewButtons.forEach(function(button) {
         button.addEventListener('click', function(event) {
             event.preventDefault();
 
             var id = button.getAttribute('data-preview-id');
-            window['preview' + id + 'Element'](); // Corrected the template literal to concatenate strings
+            if (id === 'title') {
+                previewTitleElement(); // Call previewTitleElement function for title preview
+            } else if (id === 'description') {
+                previewDescriptionElement(); // Call previewDescriptionElement function for description preview
+            } else if (id === 'image') {
+                previewImage();
+            } else if (id === 'layout') {
+                previewLayout();
+            } else {
+                window['preview' + id + 'Element'](); // For other elements
+            }
+                
         });
     });
 
@@ -98,5 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
     layoutCheckbox.addEventListener('change', function() {
         toggleElementDisplay(layoutCheckbox.id, 'variation-input-' + layoutCheckbox.id, 'buttons-' + layoutCheckbox.id, 'variations-' + layoutCheckbox.id);
     });
+
+    
 
 });

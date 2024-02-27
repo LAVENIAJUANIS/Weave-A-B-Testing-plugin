@@ -21,8 +21,8 @@ add_action('admin_enqueue_scripts', 'ab_testing_enqueue_scripts');
 // Activation hook
 register_activation_hook(__FILE__, 'ab_testify_activate');
 
-function enqueue_my_plugin_styles() {
-    wp_enqueue_style( 'my-plugin-styles', plugins_url ('styles.css', __FILE__));
+function weave_testing_enqueue_styles() {
+    wp_enqueue_style( 'weave-testing-style', plugins_url ('styles.css', __FILE__));
 }
 
 add_action('wp_enqueue_scripts', 'enqueue_my_plugin_styles');

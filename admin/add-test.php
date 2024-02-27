@@ -104,41 +104,30 @@ function ab_testify_test_page() {
                             <div id="title-variation-input" style="display: none;">
                                 <input type="text" id="title-variation" placeholder="Enter title variation">
                             </div>
-                            
                             <div id="title-buttons" style="display: none;">
                                 <button class="action-button link-button" data-action="editElement" data-element-id="title">Edit</button>
-                                <button id="preview-button">Preview</button>
+                                <button class="preview-button" id="preview-title-button" data-preview-id="title">Preview</button>
                             </div>
-
-                            
-                            
                             <div id="preview-title-section"></div>
-
                             <div id="title-variations" style="display: none;">
                                 <button class="action-button link-button" data-action="addVariation" data-element-id="title">Add Variation</button>
                             </div>
 
-                            
                         </div>
 
                             <input type="checkbox" id="element-description" name="target_elements[]" value="description">
                             <label for="element-description">Description</label><br>
                             <div id="description-variation-input" style="display: none;">
-                            <input type="text" id="description-variation" placeholder="Enter description variation">
+                                <input type="text" id="description-variation" placeholder="Enter description variation">
                             </div>
                             <div id="description-buttons" style="display: none;">
                                 <button class="action-button link-button" data-action="editElement" data-element-id="description">Edit</button>
-                                <button id="preview-description-button">Preview</button>
-                            </div>
-                            <div id="description-buttons" style="display: none;">
-                                <button class="action-button link-button" id="preview-description-button">Preview</button>
+                                <button class="preview-button" id="preview-description-button" data-preview-id="description">Preview</button>
                             </div>
                             <div id="preview-description-section"></div>
-
                             <div id="description-variations" style="display: none;">
                                 <button class="action-button link-button" data-action="addVariation" data-element-id="description">Add Variation</button>
                             </div>
-
                             
 
                             <input type="checkbox" id="element-image" name="target_elements[]" value="image">
@@ -149,17 +138,16 @@ function ab_testify_test_page() {
                                 </div>
 
                                 <div id="image-buttons" style="display: none;">
-                                    
                                     <button type="button" id="preview-image-button">Preview</button>
                                 </div>
+
+                                <div id="preview-image-section"></div>
 
                                 <div id="image-variations" style="display: none;">
                                     <button class="action-button link button" data-action="addVariation" data-element-id="description">Add Variation</button>
                                 </div>
 
-
-                                
-                                <input type="checkbox" id="element-layout" name="target_[]" value="layout">
+                                <input type="checkbox" id="element-layout" name="target_elements[]" value="layout">
                                 <label for="element-layout">Layout</label><br>
                                 <div id="layout-variation-input" style="display: none;">
                                     <label for="layout-select">Select Layout:</label>
@@ -169,15 +157,15 @@ function ab_testify_test_page() {
                                         <option value="layout3">Layout 3</option>
                                     </select>
                                 </div>
-                                <div id="layout-variations" style="display: none;">
+                                <div id="layout-buttons" style="display: none;">
                                     <button class="action-button link-button" data-action="editElement" data-element-id="layout">Edit</button>
                                     <button class="preview-button" data-preview-id="layout">Preview</button>
                                 </div>
+                                <div id="layout-variations" style="display: none;">
+                                    <button class="action-button link-button" data-action="addVariation" data-element-id="layout">Add Variation</button>
+                                </div>
                                 <div id="layout-preview-section"></div>
 
-
-
-                
                             <h2> Create Variations</h2>
 
                             <input type="submit" name="ab_testify_submit" class="button-primary" value="Start Test">
