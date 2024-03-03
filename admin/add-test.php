@@ -96,75 +96,54 @@ function ab_testify_test_page() {
                     </select>
 
                     <h2>Target Elements</h2>
-                    <div>
-                        <input type="checkbox" id="element-title" name="target_elements[]" value="title" onchange="toggleTargetElements()">
-                        <label for="element-title">Title</label><br>
-                        <div id="title-variation-input" style="display: none;">
-                            <input type="text" id="title-variation" placeholder="Enter title variation">
-                        </div>
-                        <div id="title-buttons" style="display: none;">
-                            <button class="action-button link-button" data-action="editElement" data-element-id="title">Edit</button>
-                            <button class="preview-button" id="preview-title-button" data-preview-id="title">Preview</button>
-                        </div>
-                        <div id="preview-title-section"></div>
-                        <div id="title-variations" style="display: none;">
-                            <button class="action-button link-button" data-action="addVariation" data-element-id="title">Add Variation</button>
-                        </div>
 
-                    </div>
+<div>
+    <input type="checkbox" id="element-title" name="target_elements[]" value="title" onchange="toggleTargetElements()">
+    <label for="element-title">Title</label><br>
+    <div id="title-variation-input" style="display: none;">
+        <input type="text" id="title-variation" placeholder="Enter title variation">
+        <button class="save-button" onclick="saveVariation('title')">Save</button>
+    </div>
+    <div id="saved-titles-container"></div>
+</div>
 
-                    <div>
-                        <input type="checkbox" id="element-description" name="target_elements[]" value="description" onchange="toggleTargetElements()">
-                        <label for="element-description">Description</label><br>
-                        <div id="description-variation-input" style="display: none;">
-                            <input type="text" id="description-variation" placeholder="Enter description variation">
-                        </div>
-                        <div id="description-buttons" style="display: none;">
-                            <button class="action-button link-button" data-action="editElement" data-element-id="description">Edit</button>
-                            <button class="preview-button" id="preview-description-button" data-preview-id="description">Preview</button>
-                        </div>
-                        <div id="preview-description-section"></div>
-                        <div id="description-variations" style="display: none;">
-                            <button class="action-button link-button" data-action="addVariation" data-element-id="description">Add Variation</button>
-                        </div>
+<div>
+    <input type="checkbox" id="element-description" name="target_elements[]" value="description" onchange="toggleTargetElements()">
+    <label for="element-description">Description</label><br>
+    <div id="description-variation-input" style="display: none;">
+        <input type="text" id="description-variation" placeholder="Enter description variation">
+        <button class="save-button" onclick="saveVariation('description')">Save</button>
+    </div>
+    <div id="saved-descriptions-container"></div>
+</div>
 
+<div>
+    <input type="checkbox" id="element-image" name="target_elements[]" value="image" onchange="toggleTargetElements()">
+    <label for="element-image">Image</label><br>
 
-                        <input type="checkbox" id="element-image" name="target_elements[]" value="image"  onchange="toggleTargetElements()">
-                        <label for="element-image">Image</label><br>
+    <div id="image-variation-input" style="display: none;">
+        <input type="file" id="image-variation" accept="image/*">
+        <button class="save-button" onclick="saveVariation('image')">Save</button>
+    </div>
 
-                        <div id="image-variation-input" style="display: none;">
-                            <input type="file" id="image-variation" accept="image/*">
-                        </div>
+    <div id="saved-images-container"></div>
+</div>
 
-                        <div id="image-buttons" style="display: none;">
-                            <button type="button" id="preview-image-button">Preview</button>
-                        </div>
+<div>
+    <input type="checkbox" id="element-layout" name="target_elements[]" value="layout" onchange="toggleTargetElements()">
+    <label for="element-layout">Layout</label><br>
+    <div id="layout-variation-input" style="display: none;">
+        <label for="layout-select">Select Layout:</label>
+        <select id="layout-select">
+            <option value="layout1">Layout 1</option>
+            <option value="layout2">Layout 2</option>
+            <option value="layout3">Layout 3</option>
+        </select>
+        <button class="save-button" onclick="saveVariation('layout')">Save</button>
+    </div>
+    <div id="saved-layouts-container"></div>
+</div>
 
-                        <div id="preview-image-section"></div>
-
-                        <div id="image-variations" style="display: none;">
-                            <button class="action-button link button" data-action="addVariation" data-element-id="description">Add Variation</button>
-                        </div>
-
-                        <input type="checkbox" id="element-layout" name="target_elements[]" value="layout">
-                        <label for="element-layout">Layout</label><br>
-                        <div id="layout-variation-input" style="display: none;">
-                            <label for="layout-select">Select Layout:</label>
-                            <select id="layout-select">
-                                <option value="layout1">Layout 1</option>
-                                <option value="layout2">Layout 2</option>
-                                <option value="layout3">Layout 3</option>
-                            </select>
-                        </div>
-                        <div id="layout-buttons" style="display: none;">
-                            <button class="action-button link-button" data-action="editElement" data-element-id="layout">Edit</button>
-                            <button class="preview-button" data-preview-id="layout">Preview</button>
-                        </div>
-                        <div id="layout-variations" style="display: none;">
-                            <button class="action-button link-button" data-action="addVariation" data-element-id="layout">Add Variation</button>
-                        </div>
-                        <div id="layout-preview-section"></div>
-                    </div>
 
                     <h2> Create Variations</h2>
 

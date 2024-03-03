@@ -9,26 +9,27 @@ function toggleInquiryDropdown() {
 }
 
 function toggleTargetElements() {
-    toggleElementDisplay('element-title', 'title-variation-input', 'title-buttons', 'title-variations');
-    toggleElementDisplay('element-description', 'description-variation-input', 'description-buttons', 'description-variations');
-    toggleElementDisplay('element-image', 'image-variation-input', 'image-buttons', 'image-variations');
-    toggleElementDisplay('element-layout', 'layout-variation-input', 'layout-buttons', 'layout-variations');
+    toggleElementDisplay('element-title', 'title-variation-input', 'save-title-button');
+    toggleElementDisplay('element-description', 'description-variation-input');
+    toggleElementDisplay('element-image', 'image-variation-input');
+    toggleElementDisplay('element-layout', 'layout-variation-input');
 }
 
-function toggleElementDisplay(checkboxId, variationInputId, buttonsId, variationsId) {
+function toggleElementDisplay(checkboxId, variationInputId, saveButtonId) {
     var checkbox = document.getElementById(checkboxId);
     var variationInput = document.getElementById(variationInputId);
-    var buttons = document.getElementById(buttonsId);
-    var variations = document.getElementById(variationsId);
+    var saveButton = document.getElementById(saveButtonId);
 
     if (checkbox.checked) {
         variationInput.style.display = 'block';
-        buttons.style.display = 'block';
-        variations.style.display = 'block';
+        if (saveButton) {
+            saveButton.style.display = 'inline-block';
+        }
     } else {
         variationInput.style.display = 'none';
-        buttons.style.display = 'none';
-        variations.style.display = 'none';
+        if (saveButton) {
+            saveButton.style.display = 'none';
+        }
     }
 
     if (checkboxId === 'element-image') {
@@ -37,8 +38,21 @@ function toggleElementDisplay(checkboxId, variationInputId, buttonsId, variation
     }
 }
 
+function saveVariation(elementId) {
+    var variationInput = document.getElementById(elementId + '-variation');
+    var savedVariations = document.getElementById('saved-' + elementId + 's');
+
+    if (variationInput.value.trim() !== '') {
+        var savedVariation = document.createElement('div');
+        savedVariation.textContent = variationInput.value;
+        savedVariations.appendChild(savedVariation);
+        variationInput.value = ''; // Clear input field after saving
+    } else {
+        alert('Please enter a variation before saving.');
+    }
+}
+
 function previewImage() {
-    
     var input = document.getElementById('image-variation');
     var preview = document.getElementById('preview-image-section');
 
@@ -46,22 +60,25 @@ function previewImage() {
         var reader = new FileReader();
 
         reader.onload = function (e) {
-            
             preview.innerHTML = `<h3>Image Preview:</h3><img src="${e.target.result}" alt="Uploaded Image" style="max-width: 100%;">`;
         }
-        
+
         reader.readAsDataURL(input.files[0]);
     }
 }
 
-// Edit element function
-function editElement(elementId) {
-    console.log('Edit action for element', elementId);
-}
-
-// Add variation function
 function addVariation(elementId) {
-    console.log('Add variation action for element:', elementId);
+    var variationInput = document.getElementById(elementId + '-variation');
+    var variationsContainer = document.getElementById(elementId + '-variations');
+
+    if (variationInput.value.trim() !== '') {
+        var savedVariation = document.createElement('div');
+        savedVariation.textContent = variationInput.value;
+        variationsContainer.appendChild(savedVariation);
+        variationInput.value = ''; // Clear input field after saving
+    } else {
+        alert('Please enter a variation before saving.');
+    }
 }
 
 function previewDescriptionElement() {
@@ -82,6 +99,34 @@ function previewTitleElement() {
     }
 }
 
+
+function editVariation(elementId, variationId) {
+    // Get the variation element by ID
+    var variationElement = document.getElementById(variationId);
+    
+    // Create an input field to allow editing
+    var inputField = document.createElement('input');
+    inputField.type = 'text';
+    inputField.value = variationElement.textContent;
+
+    // Replace the variation element with the input field
+    variationElement.parentNode.replaceChild(inputField, variationElement);
+
+    // Add event listener to save changes when input field loses focus
+    inputField.addEventListener('blur', function() {
+        variationElement.textContent = inputField.value;
+        // You may want to save the changes to the server here
+    });
+}
+
+function previewVariation(elementId, variationId) {
+    // Get the variation element by ID
+    var variationElement = document.getElementById(variationId);
+    
+    // Display the variation content for preview
+    alert(variationElement.textContent); // Replace alert with your preferred preview method
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     var checkboxes = [
         document.getElementById('element-title'),
@@ -100,13 +145,42 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault();
 
             var id = button.getAttribute('data-preview-id');
-            window['preview' + id + 'Element'](); // Corrected the template literal to concatenate strings
+            window['preview' + id.charAt(0).toUpperCase() + id.slice(1) + 'Element'](); // Corrected the template literal to concatenate strings
+        });
+    });
+
+    var addVariationButtons = document.querySelectorAll('[data-action="addVariation"]');
+    addVariationButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            var elementId = button.getAttribute('data-element-id');
+            saveVariation(elementId); // Call saveVariation instead of addVariation
         });
     });
 
     var layoutCheckbox = document.getElementById('element-layout');
     layoutCheckbox.addEventListener('change', function() {
-        toggleElementDisplay(layoutCheckbox.id, 'variation-input-' + layoutCheckbox.id, 'buttons-' + layoutCheckbox.id, 'variations-' + layoutCheckbox.id);
+        toggleElementDisplay(layoutCheckbox.id, 'variation-input-' + layoutCheckbox.id, 'save-' + layoutCheckbox.id);
+    });
+
+    var saveButton = document.getElementById('save-title-button');
+    saveButton.addEventListener('click', function() {
+        saveVariation('title');
+    });
+
+    var editButtons = document.querySelectorAll('.edit-button');
+    editButtons.forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            var variationId = button.getAttribute('data-variation-id');
+            editVariation('title', variationId);
+        });
+    });
+
+    var previewButtons = document.querySelectorAll('.preview-button');
+    previewButtons.forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            var variationId = button.getAttribute('data-variation-id');
+            previewVariation('title', variationId);
+        });
     });
 
 });
