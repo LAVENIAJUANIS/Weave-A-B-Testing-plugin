@@ -38,6 +38,15 @@ function toggleElementDisplay(checkboxId, variationInputId, saveButtonId) {
     }
 }
 
+function toggleTestDuration() {
+    var durationOptions = document.getElementById('duration_options');
+    if (durationOptions.style.display === 'none') {
+        durationOptions.style.display = 'block';
+    } else {
+        durationOptions.style.display = 'none';
+    }
+}
+
 function saveVariation(elementId) {
     var variationInput = document.getElementById(elementId + '-variation');
     var savedVariations = document.getElementById('saved-' + elementId + 's');
@@ -180,6 +189,21 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function(event) {
             var variationId = button.getAttribute('data-variation-id');
             previewVariation('title', variationId);
+        });
+    });
+
+    
+    var selectDurationBtn = document.getElementById('select_duration_btn');
+    selectDurationBtn.addEventListener('click', toggleTestDuration);
+
+    
+    var durationOptions = document.querySelectorAll('input[name="test_duration"]');
+    durationOptions.forEach(function(option) {
+        option.addEventListener('change', function() {
+            // Store the selected test duration value
+            var selectedDuration = option.value;
+            console.log('Selected test duration:', selectedDuration);
+            // You can perform further actions based on the selected duration
         });
     });
 

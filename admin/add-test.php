@@ -97,52 +97,63 @@ function ab_testify_test_page() {
 
                     <h2>Target Elements</h2>
 
-<div>
-    <input type="checkbox" id="element-title" name="target_elements[]" value="title" onchange="toggleTargetElements()">
-    <label for="element-title">Title</label><br>
-    <div id="title-variation-input" style="display: none;">
-        <input type="text" id="title-variation" placeholder="Enter title variation">
-        <button class="save-button" onclick="saveVariation('title')">Save</button>
-    </div>
-    <div id="saved-titles-container"></div>
-</div>
+                    <div>
+                        <input type="checkbox" id="element-title" name="target_elements[]" value="title" onchange="toggleTargetElements()">
+                        <label for="element-title">Title</label><br>
+                        <div id="title-variation-input" style="display: none;">
+                            <input type="text" id="title-variation" placeholder="Enter title variation">
+                            <button class="save-button" onclick="saveVariation('title')">Save</button>
+                        </div>
+                        <div id="saved-titles-container"></div>
+                    </div>
 
-<div>
-    <input type="checkbox" id="element-description" name="target_elements[]" value="description" onchange="toggleTargetElements()">
-    <label for="element-description">Description</label><br>
-    <div id="description-variation-input" style="display: none;">
-        <input type="text" id="description-variation" placeholder="Enter description variation">
-        <button class="save-button" onclick="saveVariation('description')">Save</button>
-    </div>
-    <div id="saved-descriptions-container"></div>
-</div>
+                    <div>
+                        <input type="checkbox" id="element-description" name="target_elements[]" value="description" onchange="toggleTargetElements()">
+                        <label for="element-description">Description</label><br>
+                        <div id="description-variation-input" style="display: none;">
+                            <input type="text" id="description-variation" placeholder="Enter description variation">
+                            <button class="save-button" onclick="saveVariation('description')">Save</button>
+                        </div>
+                        <div id="saved-descriptions-container"></div>
+                    </div>
 
-<div>
-    <input type="checkbox" id="element-image" name="target_elements[]" value="image" onchange="toggleTargetElements()">
-    <label for="element-image">Image</label><br>
+                    <div>
+                        <input type="checkbox" id="element-image" name="target_elements[]" value="image" onchange="toggleTargetElements()">
+                        <label for="element-image">Image</label><br>
 
-    <div id="image-variation-input" style="display: none;">
-        <input type="file" id="image-variation" accept="image/*">
-        <button class="save-button" onclick="saveVariation('image')">Save</button>
-    </div>
+                        <div id="image-variation-input" style="display: none;">
+                            <input type="file" id="image-variation" accept="image/*">
+                            <button class="save-button" onclick="saveVariation('image')">Save</button>
+                        </div>
 
-    <div id="saved-images-container"></div>
-</div>
+                        <div id="saved-images-container"></div>
+                    </div>
 
-<div>
-    <input type="checkbox" id="element-layout" name="target_elements[]" value="layout" onchange="toggleTargetElements()">
-    <label for="element-layout">Layout</label><br>
-    <div id="layout-variation-input" style="display: none;">
-        <label for="layout-select">Select Layout:</label>
-        <select id="layout-select">
-            <option value="layout1">Layout 1</option>
-            <option value="layout2">Layout 2</option>
-            <option value="layout3">Layout 3</option>
-        </select>
-        <button class="save-button" onclick="saveVariation('layout')">Save</button>
-    </div>
-    <div id="saved-layouts-container"></div>
-</div>
+                    <div>
+                        <input type="checkbox" id="element-layout" name="target_elements[]" value="layout" onchange="toggleTargetElements()">
+                        <label for="element-layout">Layout</label><br>
+                        <div id="layout-variation-input" style="display: none;">
+                            <label for="layout-select">Select Layout:</label>
+                            <select id="layout-select">
+                                <option value="layout1">Layout 1</option>
+                                <option value="layout2">Layout 2</option>
+                                <option value="layout3">Layout 3</option>
+                            </select>
+                            <button class="save-button" onclick="saveVariation('layout')">Save</button>
+                        </div>
+                        <div id="saved-layouts-container"></div>
+                    </div>
+
+                    <h2>Test Duration</h2>
+                    <button type="button" id="select_duration_btn" onclick="toggleTestDuration()">Select Test Duration</button>
+                    <div id="duration_options" style="display: none;">
+                        <input type="radio" id="duration_1_day" name="test_duration" value="1"> 
+                        <label for="duration_1_day">1 Day</label><br>
+                        <input type="radio" id="duration_1_week" name="test_duration" value="7"> 
+                        <label for="duration_1_week">1 Week</label><br>
+                        <input type="radio" id="duration_1_month" name="test_duration" value="30"> 
+                        <label for="duration_1_month">1 Month</label><br>
+                    </div>
 
 
                     <h2> Create Variations</h2>
@@ -162,6 +173,7 @@ function ab_testify_process_test_submission() {
     if(isset($_POST['ab_testify_submit']) && $_POST['ab_testify_submit'] == 'Start Test') {
 
         $elements_to_test = isset($_POST['target_elements']) ? $_POST['target_elements'] : array();
+        $test_duration = isset($_POST['test_duration']) ? $_POST['test_duration'] : ''; // Add test duration
 
         // Process your form submission logic here
 
@@ -169,3 +181,4 @@ function ab_testify_process_test_submission() {
         exit();
     }
 }
+?>
