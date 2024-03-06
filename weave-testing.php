@@ -18,11 +18,14 @@ add_action('admin_enqueue_scripts', 'ab_testing_enqueue_scripts');
 
 register_activation_hook(__FILE__, 'ab_testify_activate');
 
-// function weave_testing_enqueue_styles() {
-//     wp_enqueue_style( 'weave-testing-style', plugins_url ('styles.css', __FILE__));
-// }
 
-add_action('wp_enqueue_scripts', 'enqueue_my_plugin_styles');
+function weave_testing_enqueue_styles() {
+    wp_enqueue_style( 'weave-testing-style', plugin_dir_url( __FILE__ ) . 'style.css', array(), '1.0', 'all' );
+}
+
+add_action( 'wp_enqueue_scripts', 'weave_testing_enqueue_styles' );
+
+
 
 // AJAX
 function get_page_content_callback() {
@@ -41,22 +44,7 @@ function get_page_content_callback() {
 
 add_action('wp_ajax_get_page_content', 'get_page_content_callback');
 
-// AJAX handleer function
-// function ab_testify_process_test_submission() {
-//     if(isset($_POST['ab_testify_submit']) && $_POST['ab_testify_submit'] == 'Start Test') {
-//         // Process form submission logic here
 
-//         // For demonstration purposes, you can return a JSON response
-
-//         $response = array(
-//             'success' => true,
-//             'message' => 'Test started successfully!'
-//         );
-//         wp_send_json_success($response);
-//     } else {
-//         wp_send_json_error('Invalid AJAX request');
-//     }
-// }
 add_action('wp_ajax_ab_testify_process_test_submission', 'ab_testify_process_test_submission');
 add_action('wp_ajax_nopriv_ab_testify_process_test_submission', 'ab_testify_process_test_submission');
 

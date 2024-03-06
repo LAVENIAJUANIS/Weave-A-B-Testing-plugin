@@ -9,202 +9,215 @@ function toggleInquiryDropdown() {
 }
 
 function toggleTargetElements() {
-    toggleElementDisplay('element-title', 'title-variation-input', 'save-title-button');
-    toggleElementDisplay('element-description', 'description-variation-input');
-    toggleElementDisplay('element-image', 'image-variation-input');
-    toggleElementDisplay('element-layout', 'layout-variation-input');
-}
+    var titleCheckbox = document.getElementById('element-title');
+    var titleVariationInput = document.getElementById('title-variation-input');
+    var titleButtons = document.getElementById('title-buttons');
+    var titleVariations = document.getElementById('title-variations');
 
-function toggleElementDisplay(checkboxId, variationInputId, saveButtonId) {
-    var checkbox = document.getElementById(checkboxId);
-    var variationInput = document.getElementById(variationInputId);
-    var saveButton = document.getElementById(saveButtonId);
-
-    if (checkbox.checked) {
-        variationInput.style.display = 'block';
-        if (saveButton) {
-            saveButton.style.display = 'inline-block';
-        }
+    if (titleCheckbox.checked) {
+        titleVariationInput.style.display = 'block';
+        titleButtons.style.display = 'block';
+        titleVariations.style.display = 'block';
     } else {
-        variationInput.style.display = 'none';
-        if (saveButton) {
-            saveButton.style.display = 'none';
-        }
-    }
-
-    if (checkboxId === 'element-image') {
-        // Call image preview function
-        previewImage();
-    }
-}
-
-function toggleTestDuration() {
-    var durationOptions = document.getElementById('duration_options');
-    if (durationOptions.style.display === 'none') {
-        durationOptions.style.display = 'block';
-    } else {
-        durationOptions.style.display = 'none';
-    }
-}
-
-function saveVariation(elementId) {
-    var variationInput = document.getElementById(elementId + '-variation');
-    var savedVariations = document.getElementById('saved-' + elementId + 's');
-
-    if (variationInput.value.trim() !== '') {
-        var savedVariation = document.createElement('div');
-        savedVariation.textContent = variationInput.value;
-        savedVariations.appendChild(savedVariation);
-        variationInput.value = ''; // Clear input field after saving
-    } else {
-        alert('Please enter a variation before saving.');
-    }
-}
-
-function previewImage() {
-    var input = document.getElementById('image-variation');
-    var preview = document.getElementById('preview-image-section');
-
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-            preview.innerHTML = `<h3>Image Preview:</h3><img src="${e.target.result}" alt="Uploaded Image" style="max-width: 100%;">`;
-        }
-
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
-function addVariation(elementId) {
-    var variationInput = document.getElementById(elementId + '-variation');
-    var variationsContainer = document.getElementById(elementId + '-variations');
-
-    if (variationInput.value.trim() !== '') {
-        var savedVariation = document.createElement('div');
-        savedVariation.textContent = variationInput.value;
-        variationsContainer.appendChild(savedVariation);
-        variationInput.value = ''; // Clear input field after saving
-    } else {
-        alert('Please enter a variation before saving.');
-    }
-}
-
-function previewDescriptionElement() {
-    var descriptionVariation = document.getElementById('description-variation').value;
-    var previewDescriptionSection = document.getElementById('preview-description-section');
-
-    if (previewDescriptionSection) {
-        previewDescriptionSection.innerHTML = '<h3>Preview:</h3><p>Description: ' + descriptionVariation + '</p>';
-    }
-}
-
-function previewTitleElement() {
-    var titleVariation = document.getElementById('title-variation').value;
-    var previewTitleSection = document.getElementById('preview-title-section');
-
-    if (previewTitleSection) {
-        previewTitleSection.innerHTML = '<h3>Preview:</h3><p>Title: ' + titleVariation + '</p>';
+        titleVariationInput.style.display = 'none';
+        titleButtons.style.display = 'none';
+        titleVariations.style.display = 'none';
     }
 }
 
 
-function editVariation(elementId, variationId) {
-    // Get the variation element by ID
-    var variationElement = document.getElementById(variationId);
+function updateTargetElement() {
+    var titleCheckbox = document.getElementById('title_variation_checkbox');
+    var titleVariationInput = document.getElementById('title_variation_input');
+
+    titleCheckbox.disabled = false;
+
+    titleVariationInput.style.display = titleCheckbox.checked ? 'block' : 'none';
+}
+
+
+
+function toggleTitleInput() {
+    var checkbox = document.getElementById("title_variation_checkbox");
+    var inputField = document.getElementById("title_variation_input");
+    inputField.style.display = checkbox.checked ? "block" : "none";
+    var savedVariation = document.getElementById("saved_title_variation");
+    savedVariation.style.display = "none";
     
-    // Create an input field to allow editing
-    var inputField = document.createElement('input');
-    inputField.type = 'text';
-    inputField.value = variationElement.textContent;
-
-    // Replace the variation element with the input field
-    variationElement.parentNode.replaceChild(inputField, variationElement);
-
-    // Add event listener to save changes when input field loses focus
-    inputField.addEventListener('blur', function() {
-        variationElement.textContent = inputField.value;
-        // You may want to save the changes to the server here
-    });
 }
 
-function previewVariation(elementId, variationId) {
-    // Get the variation element by ID
-    var variationElement = document.getElementById(variationId);
+// for displaying saved title
+function saveTitleVariation() {
+    var inputField = document.getElementById("title_variation_text");
+    var titleVariation = inputField.value.trim(); // Trim to remove leading/trailing spaces
+    if (titleVariation !== '') {
+        var savedVariation = document.getElementById("saved_title_variation");
+
+        var variationDiv = document.createElement("div");
+        variationDiv.textContent = titleVariation;
+
+        var editButton = document.createElement("span");
+        editButton.textContent = "Edit";
+        editButton.style.cursor = "pointer";
+        editButton.style.color = "blue";
+        editButton.style.textDecoration = "underline";
+        editButton.style.marginRight = "5px";
+        editButton.onclick = function() {
+            editTitleVariation(this);
+        };
+
+        var deleteButton = document.createElement("span");
+        deleteButton.textContent = "Delete";
+        deleteButton.style.cursor = "pointer";
+        deleteButton.style.color = "red";
+        deleteButton.style.textDecoration = "underline";
+        deleteButton.onclick = function() {
+            deleteTitleVariation(this);
+        };
+
+        var buttonContainer = document.createElement("div");
+        buttonContainer.appendChild(editButton);
+        buttonContainer.appendChild(deleteButton);
+
+        var entryContainer = document.createElement("div");
+        entryContainer.classList.add("title-variation"); // Add a class to mark it as a title variation
+        entryContainer.appendChild(variationDiv);
+        entryContainer.appendChild(buttonContainer);
+
+        savedVariation.appendChild(entryContainer);
+        savedVariation.style.display = "block"; // Ensure the saved variation container is visible
+    }
+    inputField.value = ''; // Clear the input field after saving
+}
+
+
+
+
+function editTitleVariation(button) {
+    var savedVariation = button.closest('.title-variation'); // Get the parent div containing the saved variation
+    var titleSpan = savedVariation.querySelector('div'); // Get the div containing the title
+    var title = titleSpan.textContent.trim(); // Get the text content of the title and trim leading/trailing spaces
+
+    var inputField = document.getElementById("title_variation_text");
+    inputField.value = title; // Set the input field value to the extracted title
+    inputField.style.display = "inline-block"; // Ensure the input field is displayed inline-block
+    document.getElementById("save_button").style.display = "inline-block"; // Ensure the save button is displayed inline-block
+    savedVariation.style.display = "none"; // Hide the saved variation container
     
-    // Display the variation content for preview
-    alert(variationElement.textContent); // Replace alert with your preferred preview method
+    // Set focus to the input field
+    inputField.focus();
+}
+
+
+function deleteTitleVariation(button) {
+    var savedVariation = button.parentNode.parentNode; // Get the parent div containing the saved variation
+    savedVariation.remove(); // Remove the entire saved variation container
+}
+
+
+function toggleDescriptionElements() {
+    var descriptionCheckbox = document.getElementById('description_variation_checkbox');
+    var descriptionInput = document.getElementById('description_variation_input');
+    var descriptionSaveButton = document.getElementById('description_save_button');
+    var savedDescriptionVariation = document.getElementById('saved_description_variation');
+
+    var displayStyle = descriptionCheckbox.checked ? 'block' : 'none';
+
+    descriptionInput.style.display = displayStyle;
+    descriptionSaveButton.style.display = displayStyle;
+    savedDescriptionVariation.style.display = displayStyle;
+}
+
+
+function toggleDescriptionInput() {
+    var checkbox = document.getElementById("description_variation_checkbox");
+    var inputField = document.getElementById("description_variation_input");
+    var saveButton = document.getElementById("description_save_button");
+
+    var displayStyle = checkbox.checked ? "block" : "none";
+
+    inputField.style.display = displayStyle;
+    saveButton.style.display = displayStyle;
+
+    // Attach or remove saveDescriptionVariation function based on checkbox state
+    saveButton[displayStyle === 'block' ? 'addEventListener' : 'removeEventListener']("click", saveDescriptionVariation);
+}
+
+// Save description variation
+
+function saveDescriptionVariation() {
+    var inputField = document.getElementById("description_variation_text");
+    var descriptionVariation = inputField.value.trim(); // Trim to remove leading/trailing spaces
+    if (descriptionVariation !== '') {
+        var savedVariation = document.getElementById("saved_description_variation");
+
+        var variationDiv = document.createElement("div");
+        variationDiv.textContent = descriptionVariation;
+
+        var editButton = document.createElement("span");
+        editButton.textContent = "Edit";
+        editButton.style.cursor = "pointer";
+        editButton.style.color = "blue";
+        editButton.style.textDecoration = "underline";
+        editButton.style.marginRight = "5px";
+        editButton.onclick = function() {
+            editDescriptionVariation(this);
+        };
+
+        var deleteButton = document.createElement("span");
+        deleteButton.textContent = "Delete";
+        deleteButton.style.cursor = "pointer";
+        deleteButton.style.color = "red";
+        deleteButton.style.textDecoration = "underline";
+        deleteButton.onclick = function() {
+            deleteDescriptionVariation(this);
+        };
+
+        var buttonContainer = document.createElement("div");
+        buttonContainer.appendChild(editButton);
+        buttonContainer.appendChild(deleteButton);
+
+        var entryContainer = document.createElement("div");
+        entryContainer.classList.add("description-variation"); 
+        entryContainer.appendChild(variationDiv);
+        entryContainer.appendChild(buttonContainer);
+
+        savedVariation.appendChild(entryContainer);
+        savedVariation.style.display = "block"; 
+    }
+    inputField.value = ''; 
+}
+
+function deleteDescriptionVariation(button) {
+    var savedVariation = button.parentNode.parentNode; 
+    savedVariation.remove();
+}
+
+
+
+function editDescriptionVariation(button) {
+    var savedVariation = button.closest('.description-variation'); 
+    var descriptionDiv = savedVariation.querySelector('div'); 
+    var description = descriptionDiv.textContent.trim(); 
+
+    var inputField = document.getElementById("description_variation_text");
+    inputField.value = description; 
+    inputField.style.display = "inline-block"; 
+    document.getElementById("description_save_button").style.display = "inline-block"; 
+    savedVariation.style.display = "none"; 
+    
+    
+    inputField.focus();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    var checkboxes = [
-        document.getElementById('element-title'),
-        document.getElementById('element-description'),
-        document.getElementById('element-image'),
-        document.getElementById('element-layout')
-    ];
-
-    checkboxes.forEach(function(checkbox) {
-        checkbox.addEventListener('change', toggleTargetElements);
-    });
-
-    var previewButtons = document.querySelectorAll('.preview-button');
-    previewButtons.forEach(function(button) {
-        button.addEventListener('click', function(event) {
-            event.preventDefault();
-
-            var id = button.getAttribute('data-preview-id');
-            window['preview' + id.charAt(0).toUpperCase() + id.slice(1) + 'Element'](); // Corrected the template literal to concatenate strings
-        });
-    });
-
-    var addVariationButtons = document.querySelectorAll('[data-action="addVariation"]');
-    addVariationButtons.forEach(function(button) {
+    document.querySelectorAll('.action-button').forEach(function(button) {
         button.addEventListener('click', function() {
-            var elementId = button.getAttribute('data-element-id');
-            saveVariation(elementId); // Call saveVariation instead of addVariation
+            var action = this.getAttribute('data-action');
+            var elementId = this.getAttribute('data-element-id');
+            if (action && elementId) {
+                window[action](elementId);
+            }
         });
     });
-
-    var layoutCheckbox = document.getElementById('element-layout');
-    layoutCheckbox.addEventListener('change', function() {
-        toggleElementDisplay(layoutCheckbox.id, 'variation-input-' + layoutCheckbox.id, 'save-' + layoutCheckbox.id);
-    });
-
-    var saveButton = document.getElementById('save-title-button');
-    saveButton.addEventListener('click', function() {
-        saveVariation('title');
-    });
-
-    var editButtons = document.querySelectorAll('.edit-button');
-    editButtons.forEach(function(button) {
-        button.addEventListener('click', function(event) {
-            var variationId = button.getAttribute('data-variation-id');
-            editVariation('title', variationId);
-        });
-    });
-
-    var previewButtons = document.querySelectorAll('.preview-button');
-    previewButtons.forEach(function(button) {
-        button.addEventListener('click', function(event) {
-            var variationId = button.getAttribute('data-variation-id');
-            previewVariation('title', variationId);
-        });
-    });
-
-    
-    var selectDurationBtn = document.getElementById('select_duration_btn');
-    selectDurationBtn.addEventListener('click', toggleTestDuration);
-
-    
-    var durationOptions = document.querySelectorAll('input[name="test_duration"]');
-    durationOptions.forEach(function(option) {
-        option.addEventListener('change', function() {
-            // Store the selected test duration value
-            var selectedDuration = option.value;
-            console.log('Selected test duration:', selectedDuration);
-            // You can perform further actions based on the selected duration
-        });
-    });
-
 });

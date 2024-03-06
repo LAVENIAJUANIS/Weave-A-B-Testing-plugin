@@ -12,7 +12,8 @@ function ab_testify_test_page() {
     <div class="wrap">
         <h1>Add Test</h1>
         <div class="card">
-            <form method="post" action="">
+            <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
+                <input type="hidden" name="action" value="ab_testify_start_test">
                 <h2>Test information</h2>
                 <label for="test_name">Test Name:</label><br>
                 <input type="text" id="test_name" name="test_name" required placeholder="Add your test name here..."><br>
@@ -59,7 +60,7 @@ function ab_testify_test_page() {
                 <div class="card">
                     <h2> Choose Content</h2>
                     <label for="content-select">Select Content:</label>
-                    <select id="content-select" name="content">
+                    <select id="content-select" name="content" onchange="updateTargetElement()">
                         <?php
                         $args = array(
                             'post_type' => array('post', 'page'),
@@ -79,7 +80,7 @@ function ab_testify_test_page() {
                                 }
                             }
 
-                            // Display dropdown options by category
+                            
                             foreach ($post_categories as $category_name => $category_posts) {
                                 echo '<optgroup label="' . esc_attr($category_name) . '">';
                                 foreach ($category_posts as $post) {
@@ -96,89 +97,56 @@ function ab_testify_test_page() {
                     </select>
 
                     <h2>Target Elements</h2>
+                    <input type="checkbox" id="title_variation_checkbox" name="title_variation_checkbox" onchange="toggleTitleInput()">
+                    <label for="title_variation_checkbox">Title</label><br>
+                    <div id="title_variation_input" style="display: none;">
+                        <!-- Title variation input field -->
+                        <input type="text" id="title_variation_text" name="title_variation_text" placeholder="Enter title variation...">
+                        <button type="button" id="save_button" onclick="saveTitleVariation()">Save</button>
 
-                    <div>
-                        <input type="checkbox" id="element-title" name="target_elements[]" value="title" onchange="toggleTargetElements()">
-                        <label for="element-title">Title</label><br>
-                        <div id="title-variation-input" style="display: none;">
-                            <input type="text" id="title-variation" placeholder="Enter title variation">
-                            <button class="save-button" onclick="saveVariation('title')">Save</button>
+                    </div>
+                    <div id="saved_title_variation" style="display: none;"></div>
+                   
+                    <div class="input-field">
+                        <input type="checkbox" id="description_variation_checkbox" onchange="toggleDescriptionElements()">
+                        <label for="description_variation_checkbox" onclick="toggleDescriptionInput()">Description</label>
+                        <div id="description_variation_input" style="display: none;">
+                            
+                            <textarea id="description_variation_text" placeholder="Enter description variation"></textarea>          
+                            <button type="button" id="description_save_button" style="display: none;">Save</button>
                         </div>
-                        <div id="saved-titles-container"></div>
-                    </div>
-
-                    <div>
-                        <input type="checkbox" id="element-description" name="target_elements[]" value="description" onchange="toggleTargetElements()">
-                        <label for="element-description">Description</label><br>
-                        <div id="description-variation-input" style="display: none;">
-                            <input type="text" id="description-variation" placeholder="Enter description variation">
-                            <button class="save-button" onclick="saveVariation('description')">Save</button>
-                        </div>
-                        <div id="saved-descriptions-container"></div>
-                    </div>
-
-                    <div>
-                        <input type="checkbox" id="element-image" name="target_elements[]" value="image" onchange="toggleTargetElements()">
-                        <label for="element-image">Image</label><br>
-
-                        <div id="image-variation-input" style="display: none;">
-                            <input type="file" id="image-variation" accept="image/*">
-                            <button class="save-button" onclick="saveVariation('image')">Save</button>
-                        </div>
-
-                        <div id="saved-images-container"></div>
-                    </div>
-
-                    <div>
-                        <input type="checkbox" id="element-layout" name="target_elements[]" value="layout" onchange="toggleTargetElements()">
-                        <label for="element-layout">Layout</label><br>
-                        <div id="layout-variation-input" style="display: none;">
-                            <label for="layout-select">Select Layout:</label>
-                            <select id="layout-select">
-                                <option value="layout1">Layout 1</option>
-                                <option value="layout2">Layout 2</option>
-                                <option value="layout3">Layout 3</option>
-                            </select>
-                            <button class="save-button" onclick="saveVariation('layout')">Save</button>
-                        </div>
-                        <div id="saved-layouts-container"></div>
-                    </div>
-
-                    <h2>Test Duration</h2>
-                    <button type="button" id="select_duration_btn" onclick="toggleTestDuration()">Select Test Duration</button>
-                    <div id="duration_options" style="display: none;">
-                        <input type="radio" id="duration_1_day" name="test_duration" value="1"> 
-                        <label for="duration_1_day">1 Day</label><br>
-                        <input type="radio" id="duration_1_week" name="test_duration" value="7"> 
-                        <label for="duration_1_week">1 Week</label><br>
-                        <input type="radio" id="duration_1_month" name="test_duration" value="30"> 
-                        <label for="duration_1_month">1 Month</label><br>
+                        <div id="saved_description_variation" class="saved-variation"></div>
                     </div>
 
 
-                    <h2> Create Variations</h2>
-
-                    <input type="submit" name="ab_testify_submit" class="button-primary" value="Start Test">
-
-            </form>
-        </div>
     </div>
     <?php
 }
 
 // Process form submission
-add_action('admin_init', 'ab_testify_process_test_submission');
+add_action('admin_post_ab_testify_start_test', 'ab_testify_process_test_submission');
 
 function ab_testify_process_test_submission() {
     if(isset($_POST['ab_testify_submit']) && $_POST['ab_testify_submit'] == 'Start Test') {
 
-        $elements_to_test = isset($_POST['target_elements']) ? $_POST['target_elements'] : array();
-        $test_duration = isset($_POST['test_duration']) ? $_POST['test_duration'] : ''; // Add test duration
+        // Get the selected content (page/post ID)
+        $selected_content_id = isset($_POST['content']) ? $_POST['content'] : 0;
 
-        // Process your form submission logic here
+        // Get the selected content's title
+        $selected_content_title = '';
+        if ($selected_content_id) {
+            $selected_content = get_post($selected_content_id);
+            if ($selected_content) {
+                $selected_content_title = $selected_content->post_title;
+            }
+        }
+
+        // Now you have the selected page/post title to target for testing
+        // You can further process this data as needed for A/B testing
 
         wp_redirect(admin_url('admin.php?page=ab-testify-dashboard'));
         exit();
     }
 }
+
 ?>
