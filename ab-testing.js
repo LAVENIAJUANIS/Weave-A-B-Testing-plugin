@@ -219,6 +219,84 @@ function editDescriptionVariation(button) {
     inputField.focus();
 }
 
+// IMAGE SECTION
+
+function toggleImageInput() {
+    var checkbox = document.getElementById("image_variation_checkbox");
+    var inputField = document.getElementById("image_variation_input");
+    inputField.style.display = checkbox.checked ? "block" : "none";
+}
+
+function uploadImage() {
+    var uploadButton = document.getElementById("image_upload_button");
+    uploadButton.click();
+    uploadButton.addEventListener('change', handleImageUpload);
+}
+
+function handleImageUpload(event) {
+    var imageFile = event.target.files[0];
+    if (imageFile) {
+        saveImageVariation(imageFile);
+    }
+}
+
+function saveImageVariation(imageFile) {
+    if (!imageFile) {
+        return;
+    }
+    
+    var savedVariations = document.getElementById("saved_image_variations");
+    savedVariations.style.display = "block";
+
+    var img = document.createElement("img");
+    img.src = URL.createObjectURL(imageFile);
+    img.classList.add("image-variation");
+
+    var editButton = createButton("Edit", function() {
+        editImageVariation(img);
+    });
+    editButton.classList.add("edit-button");
+
+    var deleteButton = createButton("Delete", function() {
+        deleteImageVariation(img);
+    });
+    deleteButton.classList.add("delete-button");
+
+    appendToContainer(savedVariations, [img, editButton, deleteButton]);
+}
+
+function editImageVariation(imageElement) {
+
+}
+
+function deleteImageVariation(imageElement) {
+    var savedVariations = document.getElementById("saved_image_variations");
+    var editButton = imageElement.nextElementSibling;
+    var deleteButton = editButton.nextElementSibling;
+    imageElement.remove();
+    editButton.remove();
+    deleteButton.remove();
+    if (savedVariations.childElementCount === 0) {
+        savedVariations.style.display = "none";
+    }
+}
+
+
+function createButton(text, clickHandler) {
+    var button = document.createElement("button");
+    button.textContent = text;
+    button.addEventListener("click", clickHandler);
+    return button;
+}
+
+function appendToContainer(container, elements) {
+    elements.forEach(function(element) {
+        container.appendChild(element);
+    });
+}
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.action-button').forEach(function(button) {
         button.addEventListener('click', function() {

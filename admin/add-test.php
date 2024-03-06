@@ -118,6 +118,23 @@ function ab_testify_test_page() {
                             <div id="saved_description_variation" class="saved-variation"></div>
                         </div>
 
+
+                        <div class="input-field">
+                        <input type="checkbox" id="image_variation_checkbox" onchange="toggleImageInput()">
+                        <label for="image_variation_checkbox">Image Variation</label>
+                        <div id="image_variation_input" style="display: none;">
+                            <!-- Button to upload an image -->
+                            <input type="file" id="image_upload_button" accept="image/*" style="display: none;">
+                            <button type="button" onclick="uploadImage()">Upload Image</button>
+                            <!-- Saved image variations -->
+                            <div id="saved_image_variations" class="saved-variation" style="display: none;">
+                                <!-- Image variations will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+
+
+
     </div>
     <?php
 }
