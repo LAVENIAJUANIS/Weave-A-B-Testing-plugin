@@ -107,17 +107,16 @@ function ab_testify_test_page() {
                     </div>
                     <div id="saved_title_variation" style="display: none;"></div>
                    
-                    <div class="input-field">
-                        <input type="checkbox" id="description_variation_checkbox" onchange="toggleDescriptionElements()">
-                        <label for="description_variation_checkbox" onclick="toggleDescriptionInput()">Description</label>
-                        <div id="description_variation_input" style="display: none;">
-                            
-                            <textarea id="description_variation_text" placeholder="Enter description variation"></textarea>          
-                            <button type="button" id="description_save_button" style="display: none;">Save</button>
+                        <div class="input-field">
+                            <input type="checkbox" id="description_variation_checkbox" onchange="toggleDescriptionInput()">
+                            <label for="description_variation_checkbox">Description</label>
+                            <div id="description_variation_input" style="display: none;">
+                                <!-- Description variation input field -->
+                                <textarea id="description_variation_text" placeholder="Enter description variation"></textarea>
+                                <button type="button" id="description_save_button" onclick="saveDescriptionVariation()" style="display: none;">Save</button>
+                            </div>
+                            <div id="saved_description_variation" class="saved-variation"></div>
                         </div>
-                        <div id="saved_description_variation" class="saved-variation"></div>
-                    </div>
-
 
     </div>
     <?php
