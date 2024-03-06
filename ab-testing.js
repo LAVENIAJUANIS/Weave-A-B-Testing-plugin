@@ -139,8 +139,17 @@ function toggleDescriptionInput() {
     inputField.style.display = displayStyle;
     saveButton.style.display = displayStyle;
 
-    // Attach or remove saveDescriptionVariation function based on checkbox state
+    
     saveButton[displayStyle === 'block' ? 'addEventListener' : 'removeEventListener']("click", saveDescriptionVariation);
+
+   
+    if (!checkbox.checked) {
+        inputField.value = ''; // Clear input field
+        var savedVariations = document.getElementsByClassName("description-variation");
+        Array.from(savedVariations).forEach(function(savedVariation) {
+            savedVariation.style.display = 'none';
+        });
+    }
 }
 
 // Save description variation
